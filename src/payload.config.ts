@@ -1,21 +1,20 @@
-// storage-adapter-import-placeholder
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
-
-import sharp from 'sharp' // sharp-import
-import path from 'path'
-import { buildConfig, PayloadRequest } from 'payload'
-import { fileURLToPath } from 'url'
+import { PayloadRequest, buildConfig } from 'payload'
 
 import { Categories } from './collections/Categories'
+import { Footer } from './Footer/config'
+import { Header } from './Header/config'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
-import { Footer } from './Footer/config'
-import { Header } from './Header/config'
-import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
+import { fileURLToPath } from 'url'
 import { getServerSideURL } from './utilities/getURL'
+import path from 'path'
+import { plugins } from './plugins'
+import sharp from 'sharp' // sharp-import
+// storage-adapter-import-placeholder
+import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -59,11 +58,7 @@ export default buildConfig({
   },
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URI || '',
-    },
-  }),
+  db: vercelPostgresAdapter(),
   collections: [Pages, Posts, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
