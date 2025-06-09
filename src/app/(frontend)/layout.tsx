@@ -1,26 +1,37 @@
-import type { Metadata } from 'next'
+import './globals.css'
 
-import { cn } from '@/utilities/ui'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
-import React from 'react'
+import { Libre_Baskerville, Nunito_Sans } from 'next/font/google'
 
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
-import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import type { Metadata } from 'next'
+import { Providers } from '@/providers'
+import React from 'react'
+import { cn } from '@/utilities/ui'
 import { draftMode } from 'next/headers'
-
-import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+
+const serif = Libre_Baskerville({
+  subsets: ['latin'],
+  variable: '--font-libre-baskerville',
+  display: 'swap',
+  weight: ['400', '700'],
+})
+const sans = Nunito_Sans({
+  subsets: ['latin'],
+  variable: '--font-nunito-sans',
+  display: 'swap',
+  weight: ['400', '700'],
+})
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn(serif.variable, sans.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />

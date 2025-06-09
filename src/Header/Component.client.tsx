@@ -1,13 +1,15 @@
 'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+
 import React, { useEffect, useState } from 'react'
 
+import { Button } from '@/components/ui/button'
 import type { Header } from '@/payload-types'
-
-import { Logo } from '@/components/Logo/Logo'
 import { HeaderNav } from './Nav'
+import Link from 'next/link'
+import { Logo } from '@/components/Logo/Logo'
+import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { usePathname } from 'next/navigation'
+import { useSticky } from './hooks/use-is-sticky'
 
 interface HeaderClientProps {
   data: Header
@@ -18,6 +20,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const [theme, setTheme] = useState<string | null>(null)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
+  const [headerBarRef, sticky] = useSticky()
 
   useEffect(() => {
     setHeaderTheme(null)
@@ -30,12 +33,17 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
+    <header ref={headerBarRef} className={`container sticky top-4 z-20 rounded-3xl transition-all ${sticky && "bg-white shadow"}`} {...(theme ? { 'data-theme': theme } : {})}>
+      <div className="py-4 px-4 grid lg:grid-cols-[300px_1fr_300px] justify-center items-center gap-4">
         <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+          <Logo className="text-black dark:text-black w-36" />
         </Link>
         <HeaderNav data={data} />
+        <Button asChild variant='ghost' color='primary' >
+          <Link href="tel:1234567890">
+            <span className="text-sm">Call Us</span>
+          </Link>
+        </Button>
       </div>
     </header>
   )

@@ -82,12 +82,27 @@
   }
 }
 
+@theme {
+  --font-serif: var(--font-libre-baskerville);
+  --font-main: var(--font-nunito-sans);
+}
+
 @layer base {
   * {
   }
   body {
     @apply min-h-[100vh] flex flex-col;
   }
+
+  h1 {
+    @apply text-3xl font-bold tracking-tight font-serif;
+  }
+}
+
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
 }
 
 html {
