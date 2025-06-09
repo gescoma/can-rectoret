@@ -36,8 +36,5 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     }
-  },
-  "[xml]": {
-    "editor.defaultFormatter": "redhat.vscode-xml"
   }
 }
