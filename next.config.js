@@ -17,6 +17,10 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      {
+        hostname: 'res.cloudinary.com',
+        protocol: 'https',
+      }
     ],
   },
   reactStrictMode: true,

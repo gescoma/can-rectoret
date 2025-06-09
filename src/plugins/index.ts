@@ -1,18 +1,20 @@
-import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
-import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
-import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
-import { redirectsPlugin } from '@payloadcms/plugin-redirects'
-import { seoPlugin } from '@payloadcms/plugin-seo'
-import { searchPlugin } from '@payloadcms/plugin-search'
-import { Plugin } from 'payload'
-import { revalidateRedirects } from '@/hooks/revalidateRedirects'
-import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
-import { searchFields } from '@/search/fieldOverrides'
-import { beforeSyncWithSearch } from '@/search/beforeSync'
-
+import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { Page, Post } from '@/payload-types'
+import {cloudinaryAdapter, cloudinaryUrl} from './adapters/cloudinary-adapter'
+
+import { Plugin } from 'payload'
+import { beforeSyncWithSearch } from '@/search/beforeSync'
+import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
+import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { getServerSideURL } from '@/utilities/getURL'
+import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
+import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
+import { redirectsPlugin } from '@payloadcms/plugin-redirects'
+import { revalidateRedirects } from '@/hooks/revalidateRedirects'
+import { searchFields } from '@/search/fieldOverrides'
+import { searchPlugin } from '@payloadcms/plugin-search'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
@@ -91,4 +93,15 @@ export const plugins: Plugin[] = [
     },
   }),
   payloadCloudPlugin(),
+  cloudStoragePlugin({
+    collections: {
+      media: {
+        adapter: cloudinaryAdapter,
+        disableLocalStorage: true,
+        generateFileURL: ({ filename }) => {
+          return cloudinaryUrl(`media/${filename}`, { secure: true })
+        }
+      }
+    }
+  })
 ]
